@@ -1,0 +1,19 @@
+/* pages/login/login.wxss */
+@import '/weui/weui.wxss';
+page{
+  display: flow-root;
+  height: 100%;
+  width: 100%;
+}
+.logo{
+  display:flex;                   
+  justify-content: center;         
+ 
+}
+.logo image { 
+  display: flex;
+  width: 400px;
+  height: 200px;
+  }
+
+

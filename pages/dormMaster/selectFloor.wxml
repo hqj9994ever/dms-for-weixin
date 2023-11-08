@@ -1,0 +1,14 @@
+<!--pages/givePoint/selectFloor.wxml-->
+<cu-custom bgColor="bg-gradual-blue" isBack="{{true}}">
+	<view slot="backText">返回</view>
+	<view slot="content">楼层列表</view>
+</cu-custom>
+
+<view class="cu-list menu card-menu margin-top-xl margin-bottom-xl shadow-lg">
+				<view class="cu-item arrow" wx:for="{{floorList}}" wx:key="index">
+					<view class="content" bindtap="TogiveScore" data-floor="{{item.floor}}">
+						<image class="weui-grid__icon" src="/static/floor.png" />
+						<text class="text-grey">{{item.floor}}楼</text>
+					</view>
+				</view>
+			</view>

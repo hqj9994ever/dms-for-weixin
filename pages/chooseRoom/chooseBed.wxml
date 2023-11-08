@@ -1,0 +1,57 @@
+<!--pages/chooseRoom/chooseBed.wxml-->
+<!--pages/chooseRoom/chooseRoom.wxml-->
+<view class='cu-custom'>
+	<view class="cu-bar fixed bg-shadeTop" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
+		<navigator class='action' open-type="navigateBack" delta="1" hover-class="none">
+			<text class='cuIcon-back'></text> 返回
+		</navigator>
+		<view class='content' style='top:{{StatusBar}}px;'>{{buildingName}}</view>
+	</view>
+</view>
+<swiper class="screen-swiper round-dot" indicator-dots="true" circular="true" autoplay="true" interval="5000" duration="500">
+	<swiper-item wx:for="{{4}}" wx:key>
+		<image src="https://image.weilanwl.com/img/4x3-{{index+1}}.jpg" mode='aspectFill'></image>
+	</swiper-item>
+</swiper>
+
+<view class="VerticalBox">
+	<scroll-view class="VerticalNav nav" scroll-y scroll-with-animation scroll-top="{{VerticalNavTop}}" style="height:calc(100vh - 375rpx)">
+		<!-- 循环显示房间 -->
+		<view class="cu-item {{index==TabCur?'text-green cur':''}}" wx:for="{{roomsList}}" wx:key bindtap='tabSelect' data-id="{{index}}">
+			{{item.name}}
+		</view>
+	</scroll-view>
+	<scroll-view class="VerticalMain" scroll-y scroll-with-animation style="height:calc(100vh - 375rpx)" scroll-into-view="main-{{MainCur}}" bindscroll="VerticalMain">
+		<view class="padding-top padding-lr" wx:for="{{roomsList}}" wx:key id="main-{{item.id}}" wx:for-index="i">
+			<view class='cu-bar solid-bottom bg-white'>
+				<view class='action'>
+					<text class='cuIcon-title text-green'></text>{{item.name}} {{item.balName}}{{item.toiName}}</view>
+			</view>
+
+			<!-- 循环显示床位 -->
+			<view wx:for="{{bedsList}}">
+				<view wx:if="{{item.roomNo==roomsList[i].no}}">
+
+					<view class="cu-list menu-avatar">
+						<view class="cu-item" bindtap="Choose" data-id="{{item.id}}" data-no="{{item.no}}">
+							<view class=" cu-avatar round lg" style="background-image:url({{img}});">
+							<view class="cu-tag badge">99+</view>
+						</view>
+						<view class="content">
+							<view class="text-grey">
+								<text class="text-cut">{{item.name}}</text>
+								<view class="cu-tag round bg-orange sm">可选</view>
+							</view>
+							<view class="text-gray text-sm flex">
+								<text class="text-cut">
+                  床位类型：{{item.typName}} </text>
+							</view>
+						</view>
+					</view>
+				</view>
+			</view>
+		</view>
+</view>
+
+</scroll-view>
+</view>

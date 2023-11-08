@@ -1,0 +1,56 @@
+<!--pages/myRoom/myRoom.wxml-->
+<view class='cu-custom'>
+	<view class="cu-bar fixed bg-shadeTop" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
+		<navigator class='action' open-type="navigateBack" delta="1" hover-class="none">
+			<text class='cuIcon-back'></text> 返回
+		</navigator>
+		<view class='content' style='top:{{StatusBar}}px;'>我的宿舍</view>
+	</view>
+</view>
+
+<swiper class="screen-swiper round-dot" indicator-dots="true" circular="true" autoplay="true" interval="5000" duration="500">
+	<swiper-item wx:for="{{4}}" wx:key>
+		<image src="https://image.weilanwl.com/img/4x3-{{index+1}}.jpg" mode='aspectFill'></image>
+	</swiper-item>
+</swiper>
+<view class="VerticalBox">
+	<scroll-view class="VerticalNav nav" scroll-y scroll-with-animation scroll-top="{{VerticalNavTop}}" style="height:calc(100vh - 375rpx)">
+
+		<!-- 循环显示区域 -->
+		<view class="cu-item {{index==TabCur?'text-green cur':''}}" wx:for="{{bedList}}" wx:key bindtap='tabSelect' data-id="{{index}}">
+			{{item.name}}
+		</view>
+	</scroll-view>
+	<scroll-view class="VerticalMain" scroll-y scroll-with-animation style="height:calc(100vh - 375rpx)" scroll-into-view="main-{{MainCur}}" bindscroll="VerticalMain">
+		<view class="padding-top padding-lr" wx:for="{{bedList}}" wx:key id="main-{{item.id}}" wx:for-index="i">
+			<view class='cu-bar solid-bottom bg-white'>
+				<view class='action'>
+					<text class='cuIcon-title text-green'></text>{{item.name}} </view>
+			</view>
+
+			<!-- 循环显示楼栋 -->
+			<view wx:for="{{UserInfosList}}">
+				<view wx:if="{{item.bedNo==bedList[i].no}}">
+					<view class="cu-list menu-avatar">
+						<view class="cu-item" bindtap="ToBed" data-name="{{item.name}}" data-no="{{item.no}}">
+							<view class="cu-avatar round lg" style="background-image:url({{img}});">
+								<!-- 右上角红点 -->
+								<view class="cu-tag badge">在校</view>
+							</view>
+							<view class="content">
+								<view class="text-grey">
+									<text class="text-cut">{{item.name}}</text>
+									<view class="cu-tag round bg-orange sm">{{item.grade}}级</view>
+								</view>
+								<view class="text-gray text-sm flex">
+									<text class="text-cut">
+              	 学号：{{item.no}}</text>
+								</view>
+							</view>
+						</view>
+					</view>
+				</view>
+			</view>
+		</view>
+	</scroll-view>
+</view>

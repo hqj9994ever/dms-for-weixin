@@ -1,0 +1,38 @@
+<view class='cu-custom'>
+	<view class="cu-bar fixed bg-shadeTop" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
+		<navigator class='action' open-type="navigateBack" delta="1" hover-class="none">
+			<text class='cuIcon-back'></text> 返回
+		</navigator>
+		<view class='content' style='top:{{StatusBar}}px;'>晚间考勤</view>
+	</view>
+</view>
+
+
+<view class="cu-card dynamic " style="padding-top:100px;">
+	<view class="cu-item shadow">
+		<view class="cu-list menu-avatar">
+			<view class="cu-item">
+				<view class="cu-avatar round xl bg-white" style="margin-right:100px;">
+					<view class="avatar" >
+						<open-data type="userAvatarUrl" ></open-data>
+					</view>
+				</view>
+				<view class="content flex-sub" >
+					<view style="padding-left:30px;">今日打卡状态</view>
+					<view class="text-gray text-m flex justify-between" style="padding-left:30px;">
+						{{date}}
+					</view>
+				</view>
+			</view>
+		</view>
+		<view class="text-content" style="padding-top:30px;padding-left:70px;">
+			{{myAttendanceStatus.date}}{{myAttendanceStatus.AttendanceStatus}}
+		</view>
+	</view>
+</view>
+
+
+
+<view class="userinfo" style="padding-top:50px;">
+	<button bindtap='getLocation'>点击考勤</button>
+</view>

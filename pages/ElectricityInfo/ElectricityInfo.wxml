@@ -1,0 +1,45 @@
+<!--pages/ElectricityInfo/ElectricityInfo.wxml-->
+<view class='cu-custom'>
+	<view class="cu-bar fixed bg-shadeTop" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
+		<navigator class='action' open-type="navigateBack" delta="1" hover-class="none">
+			<text class='cuIcon-back'></text> 返回
+		</navigator>
+		<view class='content' style='top:{{StatusBar}}px;'>电费查询</view>
+	</view>
+</view>
+
+
+<form bindsubmit="Research">
+	<view class="top" style="top:{{StatusBar}}+500px;padding-top:100px;">
+	</view>
+	<view class="cu-form-group">
+		<view class="flex-sub text-center">{{roomName}}电费使用详情</view>
+	</view>
+
+	<canvas canvas-id="columnCanvas" disable-scroll="true" class="canvas1"></canvas>
+
+	<view class="cu-form-group">
+		<view class="title">起始日期</view>
+		<picker mode="date" value="{{beginDate}}" start="2015-09-01" end="2020-09-01" bindchange="BeginDateChange">
+			<view class="picker">
+				{{beginDate}}
+			</view>
+		</picker>
+	</view>
+	<view class="cu-form-group">
+		<view class="title">结束日期</view>
+		<picker mode="date" value="{{endDate}}" start="2015-09-01" end="2020-09-01" bindchange="EndDateChange">
+			<view class="picker">
+				{{endDate}}
+			</view>
+		</picker>
+	</view>
+	<view class="research" style="top:10px">
+		<button class="cu-btn lines-black round shadow" style="width:100px" form-type="submit">查询</button>
+	</view>
+</form>
+<canvas  canvas-id="searchCanvas" disable-scroll="true" class="canvas1"
+bindtouchstart="touchstart" bindtouchmove="touchmove" bindtouchend="touchend" disable-scroll="true"></canvas>
+
+
+

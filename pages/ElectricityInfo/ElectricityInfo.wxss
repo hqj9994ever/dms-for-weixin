@@ -1,0 +1,37 @@
+/* pages/ElectricityInfo/ElectricityInfo.wxss */
+.cu-form-group .title {
+  min-width: calc(4em + 30rpx);
+}
+.cu-form-group .room {
+  display: flex;    /*设置显示样式**/
+  align-items: center;    /**子view垂直居中*/
+  vertical-align: center; /**垂直居中*/
+  justify-content: center; /**内容居中*/
+  flex-direction:row; 
+}
+
+.canvas1 {
+  width:  750rpx;
+  margin: 0 auto;
+  height: 700rpx;
+  margin-top: 45rpx;
+  
+  }
+
+ .research {
+  justify-content:flex-end;
+  right: 0;
+  position: relative;
+  align-items:flex-end;
+  display: flex;
+ }
+
+ .canvasHigh {
+  width: 2250rpx;
+  height: 270rpx;
+  transform: translateX(-200%);
+}
+.canvas_img{
+  width: 2250rpx;
+  height: 270rpx;
+}

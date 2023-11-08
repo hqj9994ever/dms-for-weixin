@@ -1,0 +1,38 @@
+/**index.wxss**/
+.myContainer{
+  width:100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding-bottom:10rpx;
+}
+.touch-item {
+ font-size: 14px;
+ display: flex;
+ /* //均匀排布每个元素 */
+ background: rgb(250, 250, 250);
+ justify-content: space-between;
+ border-bottom:1px solid rgb(247, 245, 245);
+ width: 100%;
+ height: auto;
+ overflow: hidden;
+ margin-top:16rpx;
+ 
+}
+.outContent .cu-item .content{
+  left: 10px!important;
+}
+.outContent .text-content{
+  border-top: 1px solid #ece9e9;
+}
+.del {
+ background-color: #c00;
+ width: 60px;
+ height: 20px;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ justify-content: center;
+ color: #fff;
+ -webkit-transition: all 0.4s;
+ transition: all 0.4s;
+}

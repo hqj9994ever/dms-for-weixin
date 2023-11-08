@@ -1,0 +1,37 @@
+<view class="logo" style="padding-top:100px;">
+  <scroll-view scroll-x class="nav text-center">
+    <view class="cu-item {{index==tabCur?'text-blue cur':''}}" wx:for="{{dateList}}" wx:key="item" bindtap='tabSelect' data-id="{{index}}">
+      <text> {{item}} </text>
+    </view>
+  </scroll-view>
+</view>
+<!-- 学生 -->
+<form bindsubmit="clickLogin" wx:if="{{0==tabCur}}" style="padding-top:10px;">
+  <view class="cu-form-group margin-top">
+    <view class="title">学号</view>
+    <input type="text" placeholder="请输入学号" bindinput="usernameInput" name="username" ></input>
+  </view>
+  <view class="cu-form-group">
+    <view class="title">密码</view>
+    <input type="password" name="password" placeholder="请输入密码" bindinput="passwordInput"></input>
+
+  </view>
+  <view class="padding flex flex-direction">
+    <button class="cu-btn bg-blue lg" bindtap="clickLogin">学生登录</button>
+  </view>
+</form>
+<!-- 管理员 -->
+<form bindsubmit="clickLogin" wx:if="{{1==tabCur}}" style="padding-top:10px;">
+  <view class="cu-form-group margin-top">
+    <view class="title">编号</view>
+    <input type="text" placeholder="请输入编号" bindinput="usernameInput" name="username" ></input>
+  </view>
+  <view class="cu-form-group">
+    <view class="title">密码</view>
+    <input type="password" name="password" placeholder="请输入密码" bindinput="passwordInput"></input>
+
+  </view>
+  <view class="padding flex flex-direction">
+    <button class="cu-btn bg-blue lg" bindtap='clickLogin'>管理员登录</button>
+  </view>
+</form>

@@ -1,0 +1,58 @@
+<!--pages/dormMaster/dailyAttendance.wxml-->
+<view class='cu-custom'>
+	<view class="cu-bar fixed bg-shadeTop" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
+		<navigator class='action' open-type="navigateBack" delta="1" hover-class="none">
+			<text class='cuIcon-back'></text> 返回
+		</navigator>
+		<view class='content' style='top:{{StatusBar}}px;'>晚间考勤</view>
+	</view>
+</view>
+
+<view class="userinfo" style="padding-top:100px">
+	<button bindtap='newAttendance'>新建每日考勤</button>
+</view>
+
+<view class="VerticalBox" style="top:{{StatusBar}}+500px;">
+	<scroll-view class="VerticalNav nav" scroll-y scroll-with-animation scroll-top="{{VerticalNavTop}}" style="height:calc(100vh - 375rpx)"> 
+	<!-- 循环显示楼层 -->
+		<view class="cu-item {{index==TabCur?'text-green cur':''}}" wx:for="{{dateList}}" wx:key bindtap='tabSelect' data-id="{{index}}">
+		<text> {{item.day}} </text>	
+		</view>
+	</scroll-view>
+
+	<scroll-view class="VerticalMain" scroll-y scroll-with-animation style="height:calc(100vh - 375rpx)" scroll-into-view="main-{{MainCur}}" bindscroll="VerticalMain">
+		<view class="padding-top padding-lr" wx:for="{{dateList}}" wx:key id="main-{{item.id}}" wx:for-index="i">
+			<view class='cu-bar solid-bottom bg-white'>
+				<view class='action'>
+					<text class='cuIcon-title text-green'></text>{{item.day}}未签到名单 </view>
+			</view>
+
+			<!-- 循环显示楼栋 -->
+			<view wx:for="{{unAttendentList}}">
+				<view wx:if="{{item.date==dateList[i].day}}">
+
+					<view class="cu-list menu-avatar">
+						<view class="cu-item" data-name="{{item.name}}" data-no="{{item.no}}">
+							<view class="cu-avatar round lg" style="background-image:url(/static/buildings.png);">
+
+							</view>
+							<view class="content">
+								<view class="text-grey">
+									<text class="text-cut">{{item.name}}</text>
+									<!-- <view class="cu-tag round bg-orange sm">{{item.score}}分</view> -->
+								</view>
+								<view class="text-gray text-sm flex">
+									<text class="text-cut">
+               			床位：{{item.bed_no}} </text>
+								</view>
+							</view>
+							<view class="action">
+            <view class="cu-tag round bg-red m">缺</view>
+          </view>
+						</view>
+					</view>
+				</view>
+			</view>
+		</view>
+	</scroll-view>
+</view>

@@ -1,0 +1,41 @@
+<!--pages/dormMaster/sendNotice.wxml-->
+<cu-custom bgColor="bg-gradual-blue" isBack="{{true}}">
+  <view slot="backText">返回</view>
+  <view slot="content">公告栏</view>
+</cu-custom>
+<view class="padding flex flex-direction">
+  <button class="cu-btn bg-blue lg" bindtap="showModal">发布新公告</button>
+</view>
+<view class="cu-form-group align-start">
+  <view class="title">发布公告</view>
+  <textarea name="newNotice" placeholder="请输入公告内容" bindblur="newNotice" style="width: 100%;" value="{{newNotice}}" auto-focus></textarea>
+</view>
+
+<scroll-view scroll-y scroll-with-animation>
+  <view class="container">
+    <view data-index="{{index}}" wx:for="{{itemlist}}">
+      <view class="outContent">
+        <view class="another">
+          <view class="cu-card dynamic ">
+            <view class="cu-item shadow">
+              <view class="cu-list menu-avatar">
+                <view class="cu-item">
+                  <view class="content">
+                    <view>发布者:{{item.name}}</view>
+                    <view class="text-gray text-sm flex justify-between">
+                      发布时间:{{item.date}}
+                    </view>
+                    <view class="text-gray text-sm text-right padding">
+                      <view class="del" catchtap="del" data-index="{{index}}" data-id="{{item.id}}">删除</view>
+                    </view>
+                  </view>
+                </view>
+              </view>
+              <view class="text-content">{{item.notice}}</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</scroll-view>

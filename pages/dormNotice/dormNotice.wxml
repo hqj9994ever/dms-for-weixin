@@ -1,0 +1,34 @@
+<!--pages/dormNotice/dormNotice.wxml-->
+<cu-custom bgColor="bg-gradual-blue" isBack="{{true}}">
+	<view slot="backText">返回</view>
+	<view slot="content">公告栏</view>
+</cu-custom>
+<scroll-view scroll-y scroll-with-animation>
+	<view  wx:for="{{noticeList}}" wx:key="index">
+		<view class="cu-card dynamic " >
+			<view class="cu-item shadow">
+				<view class="cu-list menu-avatar">
+					<view class="cu-item">
+						<view class="cu-avatar round lg" style="background-image:url({{image}});"></view>
+						<view class="content flex-sub">
+							<view>宿管</view>
+							<view class="text-gray text-sm flex justify-between">
+							{{item.date}}
+							</view>
+						</view>
+					</view>
+				</view>
+				<view class="text-content">
+					{{item.notice}}
+				</view>
+				<!-- <view class="grid flex-sub padding-lr {{isCard?'col-3 grid-square':'col-1'}}">
+				<view class="bg-img {{isCard?'':'only-img'}}" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10006.jpg);" wx:for="{{isCard?9:1}}" wx:key="{{index}}">
+				</view>
+			</view> -->
+				<view class="text-gray text-sm text-right padding">
+					<text class="cuIcon-attentionfill margin-lr-xs"></text> 10
+				</view>
+			</view>
+		</view>
+	</view>
+</scroll-view>

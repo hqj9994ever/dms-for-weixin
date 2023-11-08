@@ -1,0 +1,16 @@
+<!--pages/dormMaster/giveScore.wxml-->
+<cu-custom bgColor="bg-gradual-blue" isBack="{{true}}">
+	<view slot="backText">返回</view>
+	<view slot="content">输入分数</view>
+</cu-custom>
+<form bindsubmit="update">
+	<view class="cu-item arrow" wx:for="{{roomList}}" wx:key="index">
+		<view class="cu-form-group">
+			<view class="title">{{item.name}}</view>
+			<input placeholder="输入得分" maxlength="4" data-index="{{item.id}}" bindinput="scoreInput"></input>
+			<view><input placeholder="备注信息（选填）"data-index="{{item.id}}" bindinput="remarksInput"></input></view>
+		</view>
+	</view>
+	<button class="cu-btn bg-green lg" form-type="submit" >提交</button>
+  <button class="cu-btn bg-red margin-tb-sm lg" form-type="reset" >重置</button>
+</form>
