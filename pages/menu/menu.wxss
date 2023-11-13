@@ -7,9 +7,8 @@
 }
 
 .avatar {
-  width: 200rpx;
-  height: 200rpx;
-  margin: 20rpx;
+  width: 140rpx;
+  height: 140rpx;
   border-radius: 50%;
   clip-path: circle(100rpx at center);
 }
@@ -21,3 +20,27 @@
 .usermotto {
   margin-top: 200px;
 }
+.cuIcon-dy{
+    font-size: 35px;
+    width: 35px;
+    height: 35px;
+    /* margin-left: 20px; */
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    margin: 10rpx auto;
+}
+.weui-grid__label{
+  margin-top:30rpx ;
+}
+/* .weui-grids{
+  border: 0;
+}
+.weui-grid{
+  padding-top: 10px!important;
+  border: 0;
+}
+.weui-grid__label{
+  color:#ffffff;
+} */

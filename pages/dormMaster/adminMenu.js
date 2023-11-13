@@ -1,5 +1,6 @@
 // pages/administratorMenu/administratorMenu.js
-const app=getApp();
+import api from '../../utils/api'
+const app = getApp();
 Page({
 
   /**
@@ -8,27 +9,33 @@ Page({
   data: {
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
-    iconList: [{
+    ssList: [{
       icon: 'cardboardfill',
       color: 'red',
-      badge: 120,
+      badge: 0,
       name: '宿舍考勤',
-      url:'/pages/dormMaster/dailyAttendance'
+      url: '/pages/dormMaster/dailyAttendance'
     }, {
       icon: 'recordfill',
       color: 'orange',
-      badge: 1,
-      name: '每周评分',
-      url:'../dormMaster/selectFloor'
+      badge: 0,
+      name: '每日评分',
+      url: '/pages/RoomPoints/RoomPoints'
     }, {
       icon: 'picfill',
       color: 'yellow',
       badge: 0,
       name: '发布公告',
-      url:'../dormMaster/sendNotice'
-    }
-    ],
-    gridCol:3,
+      url: '../dormMaster/sendNotice'
+    }],
+    ryList: [{
+      icon: 'friend',
+      color: 'red',
+      badge: 0,
+      name: '学生情况',
+      url: '/pages/student/student'
+    }],
+    gridCol: 3,
     skin: true
   },
 
@@ -38,53 +45,18 @@ Page({
   onLoad: function (options) {
 
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
+  //退出登录
+  outLogin: function () {
+    api.clearAll();
+    wx.showToast({
+      title: '正在退出',
+      icon: 'none',
+      duration: 2000
+    })
+    setTimeout(() => {
+      wx.redirectTo({
+        url: '/pages/login/login',
+      })
+    }, 1500);
   },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
-  }
 })

@@ -1,4 +1,4 @@
-/* pages/chooseRoom/chooseRoom.wxss */
+/* pages/student/student.wxss */
 .myContainer {
   width: 100%;
   overflow: hidden;
@@ -11,7 +11,7 @@
 }
 
 .outContent .menu-avatar .cu-item {
-  height: 55px;
+  height: 40px;
 }
 
 .outContent .cu-item .content {
@@ -44,7 +44,4 @@
 }
 .cu-dialog .padding-xl{
   text-align: left;
-}
-.container .cu-form-group picker .picker{
-  text-align: center;
 }

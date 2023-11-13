@@ -1,38 +1,46 @@
-<view class='cu-custom'>
-	<view class="cu-bar fixed bg-shadeTop" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
-		<navigator class='action' open-type="navigateBack" delta="1" hover-class="none">
-			<text class='cuIcon-back'></text> 返回
-		</navigator>
-		<view class='content' style='top:{{StatusBar}}px;'>晚间考勤</view>
-	</view>
+<!--pages/attendance/attendance.wxml-->
+<cu-custom bgColor="bg-gradual-blue" isBack="{{true}}">
+  <view slot="backText">返回</view>
+  <view slot="content">{{user.roomNo}}宿舍考勤</view>
+</cu-custom>
+
+<view class="cu-modal {{modalName=='Modal'?'show':''}}">
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white justify-end">
+      <view class="content">缺勤原因</view>
+      <view class="action" bindtap="hideModal">
+        <text class="cuIcon-close text-red"></text>
+      </view>
+    </view>
+    <view class="padding-xl">
+      {{info}}
+    </view>
+  </view>
 </view>
-
-
-<view class="cu-card dynamic " style="padding-top:100px;">
-	<view class="cu-item shadow">
-		<view class="cu-list menu-avatar">
-			<view class="cu-item">
-				<view class="cu-avatar round xl bg-white" style="margin-right:100px;">
-					<view class="avatar" >
-						<open-data type="userAvatarUrl" ></open-data>
-					</view>
-				</view>
-				<view class="content flex-sub" >
-					<view style="padding-left:30px;">今日打卡状态</view>
-					<view class="text-gray text-m flex justify-between" style="padding-left:30px;">
-						{{date}}
-					</view>
-				</view>
-			</view>
-		</view>
-		<view class="text-content" style="padding-top:30px;padding-left:70px;">
-			{{myAttendanceStatus.date}}{{myAttendanceStatus.AttendanceStatus}}
-		</view>
-	</view>
-</view>
-
-
-
-<view class="userinfo" style="padding-top:50px;">
-	<button bindtap='getLocation'>点击考勤</button>
-</view>
+<scroll-view scroll-y scroll-with-animation wx:if="{{!showView}}">
+  <view data-index="{{index}}" wx:for="{{noticeList}}" wx:key="item">
+    <view class="outContent">
+      <view class="another">
+        <view class="cu-card dynamic ">
+          <view class="cu-item shadow">
+            <view class="cu-list menu-avatar">
+              <view class="cu-item">
+                <view class="content">
+                  <view> 缺勤:{{item.name}}</view>
+                  <view class="text-gray text-sm flex justify-between">
+                    时间:{{item.date}}
+                  </view>
+                </view>
+                <view class="action" style="width: 200rpx;text-align: right;">
+                    <text class="cu-tag bg-blue">管理员{{item.adminiName}}记录</text>
+                </view>
+              </view>
+            </view>
+            <view class="text-content" bindtap="showModal" data-target="Modal" data-content="{{item.remark}}">{{item.remark}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view style="height: 120rpx;background: #F1F1F1;"></view>
+</scroll-view>

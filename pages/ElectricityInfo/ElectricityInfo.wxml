@@ -1,45 +1,46 @@
 <!--pages/ElectricityInfo/ElectricityInfo.wxml-->
-<view class='cu-custom'>
-	<view class="cu-bar fixed bg-shadeTop" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
-		<navigator class='action' open-type="navigateBack" delta="1" hover-class="none">
-			<text class='cuIcon-back'></text> 返回
-		</navigator>
-		<view class='content' style='top:{{StatusBar}}px;'>电费查询</view>
-	</view>
+<cu-custom bgColor="bg-gradual-blue" isBack="{{true}}">
+  <view slot="backText">返回</view>
+  <view slot="content">{{user.roomNo}}宿舍电费查询</view>
+</cu-custom>
+
+<canvas canvas-id="columnCanvas" disable-scroll="true" class="canvas1"></canvas>
+<view class="align-start margin-sm">
+  <view class="cu-form-group">
+    <view style="margin-right: 5px;">剩余电费</view>
+    <input value="{{allRemain}}" disabled="true" style="text-align: right;"></input>
+  </view>
+  <view class="cu-form-group"  wx:if="{{showView}}">
+    <view style="margin-right: 5px;">缴纳电费</view>
+    <input style="text-align: right;" bindinput="remainInput" placeholder="请输入缴纳电费金额" type="digit"></input>
+  </view>
+  <view class="flex" wx:if="{{showView}}" style="margin-top: 10px;padding-bottom: 20px;">
+    <view class="flex-sub margin-xs radius" style="text-align: center;margin: 0 25px;">
+      <button class="cu-btn bg-white lg" bindtap="hideView" style="width: 100%;">取消</button>
+    </view>
+    <view class="flex-sub  margin-xs radius" style="text-align: center;margin: 0 25px">
+      <button class="cu-btn bg-blue lg" bindtap="confirm" style="width: 100%;">交费</button>
+    </view>
+  </view>
 </view>
 
-
-<form bindsubmit="Research">
-	<view class="top" style="top:{{StatusBar}}+500px;padding-top:100px;">
-	</view>
-	<view class="cu-form-group">
-		<view class="flex-sub text-center">{{roomName}}电费使用详情</view>
-	</view>
-
-	<canvas canvas-id="columnCanvas" disable-scroll="true" class="canvas1"></canvas>
-
-	<view class="cu-form-group">
-		<view class="title">起始日期</view>
-		<picker mode="date" value="{{beginDate}}" start="2015-09-01" end="2020-09-01" bindchange="BeginDateChange">
-			<view class="picker">
-				{{beginDate}}
-			</view>
-		</picker>
-	</view>
-	<view class="cu-form-group">
-		<view class="title">结束日期</view>
-		<picker mode="date" value="{{endDate}}" start="2015-09-01" end="2020-09-01" bindchange="EndDateChange">
-			<view class="picker">
-				{{endDate}}
-			</view>
-		</picker>
-	</view>
-	<view class="research" style="top:10px">
-		<button class="cu-btn lines-black round shadow" style="width:100px" form-type="submit">查询</button>
-	</view>
-</form>
-<canvas  canvas-id="searchCanvas" disable-scroll="true" class="canvas1"
-bindtouchstart="touchstart" bindtouchmove="touchmove" bindtouchend="touchend" disable-scroll="true"></canvas>
-
-
-
+<view class="flex-sub margin-sm radius" style="text-align: center;" wx:if="{{!showView}}">
+  <button class="cu-btn bg-blue lg" bindtap="showView" style="width: 100%;">充电费</button>
+</view>
+<view class="cu-form-group">
+  <view class="flex-sub">最近3条缴费记录</view>
+</view>
+<view wx:if="{{lastList.length>0}}" class="elec-his">
+  <view class="cu-timeline" wx:for="{{lastList}}" wx:key="index">
+    <view class="cu-time">{{item.dayTime}}</view>
+    <view class="cu-item">
+      <view class="content">
+        <text>{{item.hourTime}}</text>充值金额:{{item.remain}}元
+      </view>
+    </view>
+  </view>
+</view>
+<view class="cu-form-group" wx:if="{{lastList.length==0}}" style="justify-content: center;display: flex;">
+  <view class="cuIcon-more lg text-gray"></view>
+</view>
+<view style="height: 120rpx;background: #F1F1F1;"></view>

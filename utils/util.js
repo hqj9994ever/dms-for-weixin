@@ -52,6 +52,14 @@ function qqMapTransBMap(lng, lat) {
     lat: lats
   };
 }
+//随机
+function randNum(min,max) {
+  return Math.floor(Math.random()*(max-min))+min;
+}
+//补0
+function fixNum	(number, n){
+  return ( new Array(n).join('0') + number ).slice(-n);
+}
 
 module.exports = {   
   formatTime: formatTime,
@@ -60,5 +68,7 @@ module.exports = {
   timeStamp2String:timeStamp2String,
   json2Form: json2Form,
   qqMapTransBMap:qqMapTransBMap,
+  randNum:randNum,
+  fixNum:fixNum
 } 
 

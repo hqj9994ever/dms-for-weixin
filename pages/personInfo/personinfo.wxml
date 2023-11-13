@@ -1,2 +1,91 @@
 <!--pages/personInfo/personinfo.wxml-->
-<text>pages/personInfo/personinfo.wxml</text>
+<cu-custom bgColor="bg-gradual-blue" isBack="{{true}}">
+  <view slot="backText">返回</view>
+  <view slot="content">{{title=='user'?'个人信息':'修改密码'}}</view>
+</cu-custom>
+<view>
+  <view wx:if="{{title=='user'}}">
+    <view class="align-start margin-sm">
+      <view class="cu-form-group">
+        <view style="margin-right: 5px;">班级</view>
+        <input value="{{user.stuClass}}" disabled="true" style="text-align: right;"></input>
+      </view>
+      <view class="cu-form-group">
+        <view style="margin-right: 5px;">宿舍</view>
+        <input value="{{user.roomNo}}" disabled="true" style="text-align: right;"></input>
+      </view>
+      <view class="cu-form-group">
+        <view style="margin-right: 5px;">床位</view>
+        <input value="{{user.bedNum}}床" disabled="true" style="text-align: right;"></input>
+      </view>
+      <view class="cu-form-group">
+        <view style="margin-right: 5px;">姓名</view>
+        <input value="{{user.name}}" disabled="true" style="text-align: right;"></input>
+      </view>
+      <view class="cu-form-group">
+        <view style="margin-right: 5px;">性别</view>
+        <input value="{{user.gender?'男':'女'}}" disabled="true" style="text-align: right;"></input>
+      </view>
+      <view class="cu-form-group">
+        <view style="margin-right: 5px;">学号</view>
+        <input value="{{user.username}}" disabled="true" style="text-align: right;"></input>
+      </view>
+      <view class="cu-form-group">
+        <view style="margin-right: 5px;">手机</view>
+        <input placeholder="请输入11位手机号码" type="number" value="{{user.phoneNum}}" bindinput="phoneNumInput" style="text-align: right;"></input>
+      </view>
+      <view class="cu-bar bg-white margin-top">
+        <view class="action">
+          头像
+        </view>
+        <view class="action">选择一张头像上传，大小不超过500kb</view>
+      </view>
+      <view class="cu-form-group">
+        <view class="grid col-4 grid-square flex-sub">
+          <view class="bg-img" wx:for="{{imgList}}" wx:key="{{index}}" bindtap="ViewImage" data-url="{{imgList[index]}}">
+            <image src='{{imgList[index]}}' mode='aspectFill'></image>
+            <view class="cu-tag bg-red" catchtap="DelImg" data-index="{{index}}">
+              <text class="cuIcon-close"></text>
+            </view>
+          </view>
+          <view class="solids" bindtap="ChooseImage" wx:if="{{imgList.length<1}}">
+            <text class="cuIcon-cameraadd"></text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="flex">
+      <view class="flex-sub margin-xs radius" style="text-align: center;margin: 0 25px;">
+        <button class="cu-btn bg-white lg" bindtap="hideView" style="width: 100%;">取消</button>
+      </view>
+      <view class="flex-sub  margin-xs radius" style="text-align: center;margin: 0 25px">
+        <button class="cu-btn bg-blue lg" bindtap="confirm" style="width: 100%;">保存</button>
+      </view>
+    </view>
+  </view>
+  <view wx:if="{{title == 'pass'}}">
+    <view class="align-start margin-sm">
+      <view class="cu-form-group">
+        <view style="margin-right: 5px;">原密码</view>
+        <input placeholder="请输入原密码" bindinput="oldPassInput" type="password"  style="text-align: right;"></input>
+      </view>
+      <view class="cu-form-group">
+        <view style="margin-right: 5px;">新密码</view>
+        <input placeholder="请输入新密码" bindinput="newPassInput" type="password" style="text-align: right;"></input>
+      </view>
+      <view class="cu-form-group">
+        <view style="margin-right: 5px;">确认密码</view>
+        <input placeholder="请确认密码" bindinput="verifyPassInput" type="password"  style="text-align: right;"></input>
+      </view>
+    </view>
+    <view class="flex">
+      <view class="flex-sub margin-xs radius" style="text-align: center;margin: 0 25px;">
+        <button class="cu-btn bg-white lg" bindtap="hideView" style="width: 100%;">取消</button>
+      </view>
+      <view class="flex-sub  margin-xs radius" style="text-align: center;margin: 0 25px">
+        <button class="cu-btn bg-blue lg" bindtap="confirm" style="width: 100%;">保存</button>
+      </view>
+    </view>
+  </view>
+</view>

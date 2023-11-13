@@ -1,6 +1,5 @@
 // pages/dormNotice/dormNotice.js
-const app = getApp();
-var image = require('../../utils/image.js');
+import api from '../../utils/api'
 Page({
 
   /**
@@ -8,7 +7,7 @@ Page({
    */
   data: {
     noticeList: [],
-    image:image.imageList.leaderImg
+    info:''
   },
 
   /**
@@ -19,39 +18,27 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
-  },
-
-  /**
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
     var that = this;
-    wx.request({
-      url: app.globalData.url + '/wxbuildingNotice/noticeList',
-      method: "GET",
-      header: {
-        'cookie': 'JSESSIONID=' + wx.getStorageSync('serverSeesion'),
-        'Content-Type': 'application/json'
-      },
-      data: {},
-      success: function (res) {
-        var list = res.data;
-        console.log(list);
-        that.setData({
-          noticeList: list
-        })
-      }
+    api.post("callboard/list").then(res => {
+      that.setData({
+        noticeList: res.callboards
+      })
+    }).catch(err => {})
+  },
+  //看详情
+  showModal: function (e) {
+    this.setData({
+      info:  e.target.dataset.content,
+      modalName: e.currentTarget.dataset.target
+    });
+  },
+  hideModal(e) {
+    this.setData({
+      modalName: null
     })
   },
 
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  }
 })

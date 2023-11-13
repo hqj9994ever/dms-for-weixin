@@ -1,1 +1,10 @@
 /* pages/dormNotice/dormNotice.wxss */
+.text-content{
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  white-space: normal !important;
+  -webkit-line-clamp: 3;/*改成你想要的行号*/
+  -webkit-box-orient: vertical;
+}

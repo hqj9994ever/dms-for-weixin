@@ -1,6 +1,8 @@
 const app = getApp()
-
-const request = (url, options,toToast=true) => {
+function request(url, options,toToast=true) {
+  if(url.indexOf("/login")== -1 && !getUserType()){
+    return false;
+  }
   return new Promise((resolve, reject) => {
     wx.request({
       url: `${app.globalData.url}${url}`,
@@ -20,7 +22,7 @@ const request = (url, options,toToast=true) => {
         if (request.data.statusCode === 200) {
           resolve(request.data.dataZone)
         } else {
-          reject(request.data.message)
+          reject(request.data.dataZone)
         }
       },
       fail(error) {
@@ -37,8 +39,8 @@ const request = (url, options,toToast=true) => {
 const get = (url, options = {}) => {
   return request(url, { method: 'GET', data: options })
 }
-const post = (url, options) => {
-  return request(url, { method: 'POST', data: options })
+const post = (url, options,toToast) => {
+  return request(url, { method: 'POST', data: options },toToast)
 }
 const put = (url, options) => {
   return request(url, { method: 'PUT', data: options })
@@ -47,40 +49,61 @@ const put = (url, options) => {
 const remove = (url, options) => {
   return request(url, { method: 'DELETE', data: options })
 }
-
-
-/**
- * 本地存储getter/setter
- *
- * @param  {String}        key 本地缓存中的指定的`key`
- * @param  {Object|String} val 需要存储的内容(不指定表示`getter`)
- * @return {Promise}
- */
-const wxStorage = (key, val) => {
-  let isSetter = arguments.length === 2;
-  return new Promise((resolve, reject) => {
-    // setter
-    if (isSetter) {
-      return wx.setStorage({
-        key: key,
-        data: val,
-        success: () => resolve(val),
-        fail: (err) => reject(err)
-      });
-    }
-    // getter
-    try {
-      resolve(wx.getStorageSync(key));
-    } catch (e) {
-      reject(e);
-    }
-  });
+//设置缓存
+const setStorageString = (key, value) => {
+  wx.setStorageSync(key,value)
+}
+//设置缓存
+const setStorageObject = (key, value) => {
+  wx.setStorageSync(key,JSON.stringify(value))
+}
+//获取缓存String
+const getStorageString = (key) => {
+  return wx.getStorageSync(key)||''
+}
+//获取缓存Object
+const getStorageObject = (key) => {
+  return JSON.parse(wx.getStorageSync(key)||'{}')
+}
+//移除缓存
+const removeStorage = (key) => {
+  wx.removeStorageSync(key);
+}
+// 清空所有缓存
+const clearAll = () => {
+  wx.clearStorageSync();
 }
 
+//获取本地用户数据 izGetUser 是否获取用户数据
+const getUserType = () => {
+  let userType = getStorageString("userType")||''
+  if(userType){
+    return userType;
+  }else{
+    wx.showToast({
+      title: '检测到未登录，跳转登录页面',
+      icon: 'none',
+      duration: 2000
+    })
+    clearAll();
+    setTimeout(() => {
+      wx.redirectTo({
+        url: '/pages/login/login',
+      })
+    }, 1500);
+    return false
+  }
+}
 export default {
   get,
   post,
   put,
   remove,
-  wxStorage
+  setStorageString,
+  setStorageObject,
+  getStorageString,
+  getStorageObject,
+  removeStorage,
+  clearAll,
+  getUserType
 }

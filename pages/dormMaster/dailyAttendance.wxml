@@ -1,58 +1,106 @@
 <!--pages/dormMaster/dailyAttendance.wxml-->
-<view class='cu-custom'>
-	<view class="cu-bar fixed bg-shadeTop" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
-		<navigator class='action' open-type="navigateBack" delta="1" hover-class="none">
-			<text class='cuIcon-back'></text> 返回
-		</navigator>
-		<view class='content' style='top:{{StatusBar}}px;'>晚间考勤</view>
-	</view>
+<cu-custom bgColor="bg-gradual-blue" isBack="{{!showView}}">
+  <view slot="backText" wx:if="{{!showView}}">返回</view>
+  <view slot="content">宿舍考勤</view>
+</cu-custom>
+<view class="padding flex flex-direction" wx:if="{{!showView}}">
+  <button class="cu-btn bg-blue lg" bindtap="showView" data-id="">记录缺勤</button>
+</view>
+<view wx:if="{{showView}}">
+  <view class="align-start margin-sm">
+    <view class="cu-form-group" wx:if="{{!id}}">
+      <view style="margin-right: 5px;">学号</view>
+      <picker bindchange="pickerStuIdChange" range="{{picker}}" >
+        <view class="picker">{{stuId}}</view>
+      </picker>
+    </view>
+    <view class="cu-form-group">
+      <view style="margin-right: 5px;">姓名</view>
+      <input value="{{name}}" placeholder="选择学号自动带出学生姓名" disabled style="text-align: right;"></input>
+    </view>
+    <view class="cu-form-group" wx:if="{{!id}}">
+      <view style="margin-right: 5px;">宿舍</view>
+      <input value="{{roomNo}}"   placeholder="选择学号自动带出学生宿舍" disabled style="text-align: right;"></input>
+    </view>
+    <view class="cu-form-group"  wx:if="{{id}}">
+      <view style="margin-right: 5px;">缺勤时间</view>
+      <input value="{{qqDate}}"   disabled style="text-align: right;"></input>
+    </view>
+    <view class="cu-form-group">
+      <view class="title">原因</view>
+      <textarea  placeholder="请输入学生缺勤原因,限制200个字" value="{{remark}}" bindinput="remarkInput" style="width: 100%;"  maxlength="200"></textarea>
+    </view>
+  </view>
+  <view class="flex">
+    <view class="flex-sub margin-xs radius" style="text-align: center;margin: 0 25px;">
+      <button class="cu-btn bg-white lg" bindtap="hideView" style="width: 100%;">取消</button>
+    </view>
+    <view class="flex-sub  margin-xs radius" style="text-align: center;margin: 0 25px">
+      <button class="cu-btn bg-blue lg" bindtap="confirm" style="width: 100%;">保存</button>
+    </view>
+  </view>
 </view>
 
-<view class="userinfo" style="padding-top:100px">
-	<button bindtap='newAttendance'>新建每日考勤</button>
+<view class="cu-modal {{modalName=='Modal'?'show':''}}">
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white justify-end">
+      <view class="content">缺勤原因</view>
+      <view class="action" bindtap="hideModal">
+        <text class="cuIcon-close text-red"></text>
+      </view>
+    </view>
+    <view class="padding-xl">
+      {{info}}
+    </view>
+  </view>
 </view>
-
-<view class="VerticalBox" style="top:{{StatusBar}}+500px;">
-	<scroll-view class="VerticalNav nav" scroll-y scroll-with-animation scroll-top="{{VerticalNavTop}}" style="height:calc(100vh - 375rpx)"> 
-	<!-- 循环显示楼层 -->
-		<view class="cu-item {{index==TabCur?'text-green cur':''}}" wx:for="{{dateList}}" wx:key bindtap='tabSelect' data-id="{{index}}">
-		<text> {{item.day}} </text>	
-		</view>
-	</scroll-view>
-
-	<scroll-view class="VerticalMain" scroll-y scroll-with-animation style="height:calc(100vh - 375rpx)" scroll-into-view="main-{{MainCur}}" bindscroll="VerticalMain">
-		<view class="padding-top padding-lr" wx:for="{{dateList}}" wx:key id="main-{{item.id}}" wx:for-index="i">
-			<view class='cu-bar solid-bottom bg-white'>
-				<view class='action'>
-					<text class='cuIcon-title text-green'></text>{{item.day}}未签到名单 </view>
-			</view>
-
-			<!-- 循环显示楼栋 -->
-			<view wx:for="{{unAttendentList}}">
-				<view wx:if="{{item.date==dateList[i].day}}">
-
-					<view class="cu-list menu-avatar">
-						<view class="cu-item" data-name="{{item.name}}" data-no="{{item.no}}">
-							<view class="cu-avatar round lg" style="background-image:url(/static/buildings.png);">
-
-							</view>
-							<view class="content">
-								<view class="text-grey">
-									<text class="text-cut">{{item.name}}</text>
-									<!-- <view class="cu-tag round bg-orange sm">{{item.score}}分</view> -->
-								</view>
-								<view class="text-gray text-sm flex">
-									<text class="text-cut">
-               			床位：{{item.bed_no}} </text>
-								</view>
-							</view>
-							<view class="action">
-            <view class="cu-tag round bg-red m">缺</view>
+<scroll-view scroll-y scroll-with-animation wx:if="{{!showView}}">
+  <view class="container">
+    <view class="flex ">
+      <view class="basis-sm bg-white  cu-form-group " style="position: relative;">
+        <picker bindchange="pickerStuIdGet" range="{{picker}}">
+          <view class="picker">{{cStuId}}</view>
+        </picker>
+      </view>
+      <view class="basis-sm bg-white cu-form-group " >
+        <picker mode="date" value="{{cDate}}" start="2023-01-01" end="2025-01-01" bindchange="pickerDateGet">
+          <view class="picker">
+            {{cDate}}
           </view>
-						</view>
-					</view>
-				</view>
-			</view>
-		</view>
-	</scroll-view>
-</view>
+        </picker>
+      </view>
+      <view class="basis-xs bg-blue   cu-form-group justify-center" bindtap="resetparam">重置</view>
+    </view>
+    <view data-index="{{index}}" wx:for="{{noticeList}}" wx:key="item">
+      <view class="outContent">
+        <view class="another">
+          <view class="cu-card dynamic ">
+            <view class="cu-item shadow">
+              <view class="cu-list menu-avatar">
+                <view class="cu-item">
+                  <view class="content">
+                    <view>
+                      缺勤:{{item.name}}
+                      <view class="text-gray text-sm flex justify-between">
+                        |记录:{{item.adminiName}}
+                      </view>
+                    </view>
+                    <view class="text-gray text-sm flex justify-between">
+                      缺勤时间:{{item.date}}
+                    </view>
+                  </view>
+                  <view class="text-gray text-sm text-right">
+                    <view class="del bg-blue"  bindtap="showView"  data-id="{{item}}" style="margin-bottom:10rpx;">修改</view>
+                    <view class="del bg-red" catchtap="del" data-id="{{item.id}}">删除</view>
+                  </view>
+                </view>
+              </view>
+              <view class="text-content" bindtap="showModal" data-target="Modal" data-content="{{item.remark}}">{{item.remark}}</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view style="height: 120rpx;background: #F1F1F1;"></view>
+</scroll-view>

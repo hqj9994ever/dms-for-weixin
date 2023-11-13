@@ -1,53 +1,62 @@
 <!--pages/RoomPoints/RoomPoints.wxml-->
-	<view class="cu-bar fixed bg-shadeTop" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
-		<navigator class='action' open-type="navigateBack" delta="1" hover-class="none">
-			<text class='cuIcon-back'></text> 返回
-		</navigator>
-		<view class='content' style='top:{{StatusBar}}px;'>宿舍评分</view>
-	</view>
+<cu-custom bgColor="bg-gradual-blue" isBack="{{!showView}}">
+  <view slot="backText" wx:if="{{!showView}}">返回</view>
+  <view slot="content">每日评分</view>
+</cu-custom>
+<view wx:if="{{showView}}">
+  <view class="align-start margin-sm">
+    <view class="cu-form-group">
+      <view style="margin-right: 5px;">宿舍</view>
+      <picker bindchange="pickerRoomChange" range="{{picker}}" >
+        <view class="picker">{{roomNo}}</view>
+      </picker>
+    </view>
+    <view class="cu-form-group">
+      <view style="margin-right: 5px;">打分</view>
+      <input placeholder="请打分.满分100分" bindinput="scoreInput" auto-focus="true" style="text-align: right;"></input>
+    </view>
+  </view>
 
-  <view class="VerticalBox" style="top:{{StatusBar}}+500px;padding-top:100px;">
-	<scroll-view class="VerticalNav nav" scroll-y scroll-with-animation scroll-top="{{VerticalNavTop}}" style="height:calc(100vh - 375rpx)"> 
-	<!-- 循环显示楼层 -->
-		<view class="cu-item {{index==TabCur?'text-green cur':''}}" wx:for="{{floorList}}" wx:key bindtap='tabSelect' data-id="{{index}}">
-			{{item.floor}}楼
-		</view>
-	</scroll-view>
-
-	<scroll-view class="VerticalMain" scroll-y scroll-with-animation style="height:calc(100vh - 375rpx)" scroll-into-view="main-{{MainCur}}" bindscroll="VerticalMain">
-		<view class="padding-top padding-lr" wx:for="{{floorList}}" wx:key id="main-{{item.id}}" wx:for-index="i">
-			<view class='cu-bar solid-bottom bg-white'>
-				<view class='action'>
-					<text class='cuIcon-title text-green'></text>{{item.floor}}楼 </view>
-			</view>
-
-			<!-- 循环显示楼栋 -->
-			<view wx:for="{{scoreList}}">
-				<view wx:if="{{item.floor==floorList[i].floor}}">
-
-					<view class="cu-list menu-avatar">
-						<view class="cu-item" bindtap="ToBed" data-name="{{item.name}}" data-no="{{item.no}}">
-							<view class="cu-avatar round lg" style="background-image:url(/static/buildings.png);">
-							<!-- 右上角红点 -->
-								<!-- <view class="cu-tag badge">{{item.score}}</view> -->
-							</view>
-							<view class="content">
-								<view class="text-grey">
-									<text class="text-cut">{{item.name}}</text>
-									<!-- <view class="cu-tag round bg-orange sm">{{item.score}}分</view> -->
-								</view>
-								<view class="text-gray text-sm flex">
-									<text class="text-cut">
-               			日期：{{item.date}} </text>
-								</view>
-							</view>
-							<view class="action">
-            <view class="cu-tag round bg-red m">{{item.score}}分</view>
-          </view>
-						</view>
-					</view>
-				</view>
-			</view>
-		</view>
-	</scroll-view>
+  <view class="flex">
+    <view class="flex-sub margin-xs radius" style="text-align: center;margin: 0 25px;">
+      <button class="cu-btn bg-white lg" bindtap="hideView" style="width: 100%;">取消</button>
+    </view>
+    <view class="flex-sub  margin-xs radius" style="text-align: center;margin: 0 25px">
+      <button class="cu-btn bg-blue lg" bindtap="confirm" style="width: 100%;">保存</button>
+    </view>
+  </view>
 </view>
+
+<scroll-view scroll-y scroll-with-animation wx:if="{{!showView}}">
+  <view wx:for="{{histScores}}" wx:key="index">
+    <view class="cu-list menu-avatar">
+      <view class="cu-item">
+        <view class="cu-avatar lg round bg-blue" style="font-size: 16px;">{{item.roomId}}</view>
+        <view class="content" wx:if="{{item.date==null}}">
+          <view class="text-grey">今日还未打分</view>
+        </view>
+        <view class="content" wx:if="{{item.date}}">
+          <view class="text-grey">打分时间:{{item.date}}</view>
+          <view class="text-orange" style="font-size: 14px;">
+            <text class="cuIcon-selectionfill lg text-orange"></text>{{item.histScore}}分
+          </view>
+        </view>
+        <view class="action" style="width: 200rpx;">
+          <view class="cu-tag round bg-cyan"  bindtap="goHist" data-roomId="{{item.roomId}}">历史记录
+            <text class="cuIcon-moreandroid lg"></text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view style="height: 120rpx;background: #F1F1F1;"></view>
+  <view class="cu-bar bg-white solid-top title-line">
+    <view class="action">
+      <text class="cuIcon-title text-orange "></text> 评分列表
+    </view>
+    <view class="action">
+      <button class="cu-btn bg-blue shadow" bindtap="showView" wx:if="{{!showView}}">去打分</button>
+    </view>
+  </view>
+  <view style="height: 120rpx;background: #F1F1F1;"></view>
+</scroll-view>

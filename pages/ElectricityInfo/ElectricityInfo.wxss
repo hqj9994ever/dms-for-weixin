@@ -19,11 +19,7 @@
   }
 
  .research {
-  justify-content:flex-end;
-  right: 0;
   position: relative;
-  align-items:flex-end;
-  display: flex;
  }
 
  .canvasHigh {
@@ -34,4 +30,11 @@
 .canvas_img{
   width: 2250rpx;
   height: 270rpx;
+}
+
+.elec-his .cu-timeline .cu-time {
+  width: 245rpx;
+}
+.cu-timeline>.cu-item {
+  padding: 10rpx 30rpx 10rpx 120rpx;
 }

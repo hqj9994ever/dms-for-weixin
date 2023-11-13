@@ -12,8 +12,32 @@ Page({
     dateList: ["学生登录", "管理员登录"],
     tabCur: 0,
     scrollLeft: 0,
-    title:'学号',
-    url:"student/login"
+    title: '学号',
+    url: "student/login"
+  },
+  onShow(){
+    //免登录
+    let userType = api.getStorageString("userType")||''
+    if(userType){
+      wx.showToast({
+        title: '已经登录,跳转主页',
+        icon: 'none',
+        duration: 2000
+      })
+      if(userType == 'root'){
+        setTimeout(() => {
+          wx.navigateTo({
+            url: '/pages/dormMaster/adminMenu'
+          })
+        }, 1500);
+      }else{
+        setTimeout(() => {
+          wx.navigateTo({
+            url: '/pages/menu/menu'
+          })
+        }, 1500);
+      }
+    }
   },
   usernameInput(e) {
     this.setData({
@@ -31,8 +55,8 @@ Page({
       password: '',
       tabCur: e.currentTarget.dataset.id,
       scrollLeft: (e.currentTarget.dataset.id - 1) * 60,
-      title:e.currentTarget.dataset.id == 0 ? '学号' : '编号',
-      url:e.currentTarget.dataset.id == 0 ? "student/login" : "root/login"
+      title: e.currentTarget.dataset.id == 0 ? '学号' : '编号',
+      url: e.currentTarget.dataset.id == 0 ? "student/login" : "root/login"
     })
   },
   // 登录
@@ -58,9 +82,27 @@ Page({
       username: that.data.username,
       password: that.data.password
     }).then(res => {
-     console.log(res)
-     that.data.tabCur == 0 ? api.wxStorage("student",res.student):api.wxStorage("root",res.root)
-     
+      if (that.data.tabCur == 1) {
+        api.setStorageObject('root', res.root)
+        api.setStorageString('userType','root')
+        api.setStorageString('rooms',res.rooms)
+        api.setStorageString('classses',res.classses)
+        setTimeout(() => {
+          wx.navigateTo({
+            url: '/pages/dormMaster/adminMenu'
+          })
+        }, 1500);
+
+      } else {
+        api.setStorageObject('student', res.student)
+        api.setStorageString('userType','student')
+        api.setStorageString('rooms',res.rooms)
+        setTimeout(() => {
+          wx.navigateTo({
+            url: '/pages/menu/menu'
+          })
+        }, 1500);
+      }
     }).catch(err => {})
   }
 })

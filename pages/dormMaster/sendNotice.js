@@ -1,8 +1,6 @@
 // pages/dormMaster/sendNotice.js
-const app = getApp();
-var util = require('../../utils/util.js');
-var image = require('../../utils/image.js');
-
+import api from '../../utils/api'
+import util from '../../utils/util'
 Page({
 
   /**
@@ -10,49 +8,31 @@ Page({
    */
   data: {
     newNotice: '',
-    itemlist: [],
-    modalName:null
+    noticeList: [],
+    showView: false,
+    userType: '',
+    user:{},
+    info:''
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    let userType = api.getUserType()
+    let user = api.getStorageObject(userType)
+    this.setData({
+      userType: userType,
+      user:user
+    })
   },
   onShow: function () {
     var that = this;
-    var list = [];
-    for (let index = 0; index < 30; index++) {
-      list.push({
-        date:"data"+index,
-        notice:"折磨生出苦难，苦难又会加剧折磨，凡间这无穷的循环，将有我来终结！"+index
+    api.post("callboard/list").then(res => {
+      that.setData({
+        noticeList: res.callboards
       })
-      
-    }
-    that.setData({
-      itemlist: list
-    })
-    return
-
-
-    wx.request({
-      url: app.globalData.url + '/wxbuildingNotice/noticeList',
-      method: "GET",
-      header: {
-        'cookie': 'JSESSIONID=' + wx.getStorageSync('serverSeesion'),
-        'Content-Type': 'application/json'
-      },
-      data: {},
-      success: function (res) {
-        var list = res.data;
-        console.log(list);
-        that.setData({
-          itemlist: list
-        })
-      }
-
-    })
+    }).catch(err => {})
   },
 
   /**
@@ -61,93 +41,80 @@ Page({
   onPullDownRefresh: function () {
     this.onShow();
   },
-  showModal(e) {
+  showView(e) {
     this.setData({
-      modalName: 'DialogModal1'
+      showView: true
+    })
+  },
+  //看详情
+  showModal: function (e) {
+    this.setData({
+      info:  e.target.dataset.content,
+      modalName: e.currentTarget.dataset.target
+    });
+  },
+  hideModal(e) {
+    this.setData({
+      modalName: null
     })
   },
   //取消按钮 
-  hideModal: function () {
+  hideView: function () {
     this.setData({
-      modalName: null
+      showView: false
     });
   },
-  //确认 
+  //发布公告
   confirm: function () {
     var that = this;
-    if (that.data.newNotice != '') {
-      console.log(that.data.newNotice)
-      wx.request({
-        url: app.globalData.url + '/wxbuildingNotice/updateNotice',
-        method: "POST",
-        header: {
-          'cookie': 'JSESSIONID=' + wx.getStorageSync('serverSeesion'),
-          'Content-Type': 'application/json'
-        },
-        data: {
-          notice: that.data.newNotice,
-          date: util.formatTime(new Date())
-        },
-        success: function (res) {
-          var resDate = res.data;
-          console.log(resDate)
-          if (resDate.code == 200) {
-            wx.showToast({
-              title: '发布成功',
-              duration: 2000
-            })
-            that.onShow();
-          } else {
-            wx.showToast({
-              title: '发布失败',
-              duration: 2000
-            })
-          }
-        }
+    if(that.data.newNotice.length == 0){
+      wx.showToast({
+        title: '公告内容不能为空',
+        icon: 'none',
+        duration: 2000
       })
+      return false;
     }
-    this.setData({
-      modalName: null,
-      newNotice: ''
+    api.post("callboard/optAdd",{
+      adminiId:that.data.user.id,
+      date:util.formatTime(new Date()),
+      content:that.data.newNotice,
+      adminiName:that.data.user.name
+    }).then(res => {
+      that.setData({
+        showView: false,
+        newNotice: ''
+      })
+      that.onShow();
+    }).catch(err => {
+      that.setData({
+        showView: false,
+        newNotice: ''
+      })
     })
-    this.onShow();
   },
+  //发布内容
   newNotice: function (e) {
-    var that = this;
     this.setData({
       newNotice: e.detail.value
     })
-    this.confirm();
   },
   //删除事件
   del: function (e) {
-    var that = this;
-    console.log(e.target.dataset.id)
+    var that = this,id = e.target.dataset.id
     wx.showModal({
       title: '提示',
       content: '是否删除',
       success: function (sm) {
         if (sm.confirm) {
           // 用户点击了确定 可以调用删除方法了
-
-          wx.request({
-            url: app.globalData.url + '/wxbuildingNotice/deleteNotice',
-            method: "POST",
-            header: {
-              'cookie': 'JSESSIONID=' + wx.getStorageSync('serverSeesion'),
-              'Content-Type': 'application/json'
-            },
-            data: {
-              id: e.target.dataset.id
-            },
-            success: function (res) {
-              console.log(res.date)
-              that.onShow();
-            }
+          api.post("callboard/optDel",{
+            id:id
+          }).then(res => {
+            that.onShow();
+          }).catch(err => {
           })
-        } else if (sm.cancel) {
-
-        }
+        } else if (sm.cancel) {}
       }
     })
   }

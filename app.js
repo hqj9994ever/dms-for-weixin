@@ -43,10 +43,7 @@ App({
   },
  
   globalData: {
-    url:"http://localhost:8080/ssm_war_exploded/",
-    userInfo: null,
-    userId:'null',
-    header:{'cookie':''},
+    url:"http://localhost:8080/ssm_master_war/",//接口地址
     ColorList: [
       {
       title: '嫣红',

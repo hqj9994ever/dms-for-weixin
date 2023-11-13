@@ -1,122 +1,119 @@
 // pages/RoomPoints/RoomPoints.js
-var util = require('../../utils/util.js');
-
-const app = getApp()
+import api from '../../utils/api'
+import util from '../../utils/util'
 Page({
+
+  /**
+   * 页面的初始数据
+   */
   data: {
-    StatusBar: app.globalData.StatusBar,
-    CustomBar: app.globalData.CustomBar,
-    Custom: app.globalData.Custom,
-    TabCur: 0,
-    MainCur: 0,
-    VerticalNavTop: 0,
-    list: [],
-    load: true,
-    floorList:[],
-    scoreList:[]
+    histScores: [],
+    showView: false,
+    picker: [],
+    roomNo:'请选择宿舍',
+    score:'',
   },
-  onLoad() {
-    wx.showLoading({
-      title: '加载中...',
-      mask: true
-    });
-    let list = [{}];
-    for (let i = 0; i < 26; i++) {
-      list[i] = {};
-      list[i].name = String.fromCharCode(65 + i);
-      list[i].id = i;
-    }
+
+  /**
+   * 生命周期函数--监听页面加载
+   */
+  onLoad: function (options) {
     this.setData({
-      list: list,
-      listCur: list[0]
+      picker:api.getStorageString("rooms")
+    })
+    this.onShow();
+  },
+  goHist(e){
+    wx.navigateTo({
+      url: '/pages/RoomPoints/HisRoomPoints?roomId='+
+      e.target.dataset.roomid,
     })
   },
-  onShow(){
-    let that = this;
-    wx.request({
-      url: app.globalData.url +"/wxroomscore/floorlist",
-      method:"GET",
-      header:{'cookie':'JSESSIONID='+wx.getStorageSync('serverSeesion'),
-      'Content-Type': 'application/json'},
-      data:{
-        JSESSIONID: wx.getStorageSync('serverSeesion')
-      },
-      success:function(res){
-        var list=res.data;
-        console.log(list);
-        for (let i = 0; i < list.length; i++) {
-        list[i].id=i;
-       
-        };
-        that.setData({
-          floorList:list
-        })
-      }
-    }),
-    wx.request({
-      url: app.globalData.url+"/wxroomscore/scorelist",
-      method:"GET",
-      header:{'cookie':'JSESSIONID='+wx.getStorageSync('serverSeesion'),
-      'Content-Type': 'application/json'},
-      data:{
-        JSESSIONID: wx.getStorageSync('serverSeesion')
-      },
-      success:function(res){
-        var list=res.data; 
-        for (let i = 0; i < list.length; i++) {
-          list[i].id=i
-          };
-        for (let i = 0; i < list.length; i++) {
-          list[i].name=list[i].name.slice(4);//处理字符串
-          list[i].date=util.myFormatDate(new Date(list[i].date))//处理字符串
-          };
-        console.log(list);
-        that.setData({
-          scoreList:list
-         
-        })
-      }
-    })
-  },
-  onReady() {
-    wx.hideLoading()
-  },
-  tabSelect(e) {
-    this.setData({
-      TabCur: e.currentTarget.dataset.id,
-      MainCur: e.currentTarget.dataset.id,
-      VerticalNavTop: (e.currentTarget.dataset.id - 1) * 50
-    })
-  },
-  VerticalMain(e) {
-    let that = this;
-    let list = this.data.floorList;
-    let tabHeight = 0;
-    if (this.data.load) {
-      for (let i = 0; i < list.length; i++) {
-        let view = wx.createSelectorQuery().select("#main-" + list[i].id);
-        view.fields({
-          size: true
-        }, data => {
-          list[i].top = tabHeight;
-          tabHeight = tabHeight + data.height;
-          list[i].bottom = tabHeight;     
-        }).exec();
-      }
+  /**
+   * 生命周期函数--监听页面显示
+   */
+  onShow: function () {
+    var that = this;
+    api.post("score/list").then(res => {
       that.setData({
-        load: false,
-        list: list
+        histScores: res.histScores
       })
+    }).catch(err => { })
+  },
+  //选择宿舍
+  pickerRoomChange(e) {
+    this.setData({
+      roomNo: this.data.picker[parseInt(e.detail.value)]
+    })
+  },
+  //新增打分
+  showView(e) {
+    this.setData({
+      showView: true
+    })
+  },
+  //取消
+  hideView(){
+    this.setData({
+      showView: false,
+      score:'',
+      roomNo:'请选择宿舍',
+    })
+  },
+  //打分
+  scoreInput(e) {
+    this.setData({
+      score: e.detail.value
+    })
+  },
+  //保存
+  confirm: function () {
+    var that = this;
+    if(that.data.roomNo == '请选择宿舍'){
+      wx.showToast({
+        title: '宿舍不能为空',
+        icon: 'none',
+        duration: 2000
+      })
+      return false;
     }
-    let scrollTop = e.detail.scrollTop + 20;
-    for (let i = 0; i < list.length; i++) {
-      if (scrollTop > list[i].top && scrollTop < list[i].bottom) {
-        that.setData({
-          VerticalNavTop: (list[i].id - 1) * 50,
-          TabCur: list[i].id
-        })
-        return false
-      }
+    
+    if (that.data.score.length == 0) {
+      wx.showToast({
+        title: '打分不能为空',
+        icon: 'none',
+        duration: 2000
+      })
+      return false;
     }
-  }
+    let score = parseFloat(that.data.score);
+    if(score>100||score<0){
+      wx.showToast({
+        title: '分数的范围为0-100',
+        icon: 'none',
+        duration: 2000
+      })
+      return false;
+    }
+    
+    if(!(/^[0-9]+.?[0-9]*$/.test(that.data.score))){
+      wx.showToast({
+        title: '打分要为数字类型',
+        icon: 'none',
+        duration: 2000
+      })
+      return false;
+    }
+    
+    api.post("score/optAdd",{
+      roomId:that.data.roomNo,
+      date:util.myFormatDate(new Date()),
+      histScore:score,
+    }).then(res => {
+      that.hideView();
+      that.onShow();
+    }).catch(err => {
+      that.hideView();
+    })
+  },
 })

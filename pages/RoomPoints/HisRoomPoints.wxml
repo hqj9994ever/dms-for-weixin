@@ -1,0 +1,21 @@
+<!--pages/RoomPoints/HisRoomPoints.wxml-->
+<cu-custom bgColor="bg-gradual-blue" isBack="{{true}}">
+  <view slot="backText">返回</view>
+  <view slot="content">{{roomId}}宿舍历史评分</view>
+</cu-custom>
+<scroll-view scroll-y scroll-with-animation>
+  <view wx:for="{{histScores}}" wx:key="index">
+    <view class="cu-list menu-avatar" >
+      <view class="cu-item">
+        <view class="cu-avatar lg round bg-blue" style="font-size: 16px;">{{index+1}}</view>
+        <view class="content">
+          <view class="text-grey">打分时间:{{item.date}}</view>
+        </view>
+        <view class="action" style="width: 200rpx;font-size: 35rpx;">
+          <text class="cuIcon-selectionfill lg text-orange"></text>{{item.histScore}}分
+        </view>
+      </view>
+    </view>
+  </view>
+  <view style="height: 120rpx;background: #F1F1F1;"></view>
+</scroll-view>

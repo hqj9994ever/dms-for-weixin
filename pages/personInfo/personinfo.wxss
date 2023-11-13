@@ -1,1 +1,47 @@
 /* pages/personInfo/personinfo.wxss */
+.myContainer {
+  width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding-bottom: 10rpx;
+}
+
+.outContent .cu-item {
+  margin: 5px 10px 0;
+}
+
+.outContent .menu-avatar .cu-item {
+  height: 40px;
+}
+
+.outContent .cu-item .content {
+  left: 0!important;
+  width: 100%;
+}
+
+.outContent .text-content {
+  border-top: 1px solid #ece9e9;
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  white-space: normal !important;
+  -webkit-line-clamp: 3;/*改成你想要的行号*/
+  -webkit-box-orient: vertical;
+}
+
+.del {
+  border-radius: 10rpx;
+  width: 60px;
+  height: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  -webkit-transition: all 0.4s;
+  transition: all 0.4s;
+}
+.cu-dialog .padding-xl{
+  text-align: left;
+}
